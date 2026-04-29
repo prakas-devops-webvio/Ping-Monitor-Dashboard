@@ -10,7 +10,8 @@ A real-time, web-based network ping monitor that runs all 6 pings in a single br
 ## 📡 Screenshot
 
 ### Web UI portal
-<img width="1919" height="1075" alt="image" src="https://github.com/user-attachments/assets/359bb30e-e477-4a2e-b611-baaeb486a9a4" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/512578ef-2449-420e-8c78-5de0c48604cb" />
+
 
 ### Command Line  
 <img width="1266" height="787" alt="image" src="https://github.com/user-attachments/assets/7659a448-351f-4e0d-bb0b-c1c68d347e81" />
