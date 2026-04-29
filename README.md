@@ -7,6 +7,14 @@ A real-time, web-based network ping monitor that runs all 6 pings in a single br
 ![Dashboard Preview](https://img.shields.io/badge/status-active-22c55e?style=flat-square) ![Docker](https://img.shields.io/badge/docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white) ![Node](https://img.shields.io/badge/node-20--alpine-339933?style=flat-square&logo=node.js&logoColor=white) ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 ---
+## Screenshot
+
+Web UI portal
+<img width="1919" height="1075" alt="image" src="https://github.com/user-attachments/assets/359bb30e-e477-4a2e-b611-baaeb486a9a4" />
+
+Command Line  
+<img width="1266" height="787" alt="image" src="https://github.com/user-attachments/assets/7659a448-351f-4e0d-bb0b-c1c68d347e81" />
+
 
 ## ✨ Features
 
