@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  ping-monitor:
+    build: .
+    ports:
+      - "3000:3000"
+    # Required so ping works inside container
+    cap_add:
+      - NET_RAW
+    restart: unless-stopped

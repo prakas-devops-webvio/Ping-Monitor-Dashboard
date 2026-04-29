@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ping Monitor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f1117; color: #e2e8f0; font-family: 'Courier New', monospace; padding: 16px; }
+    h1 { font-size: 18px; color: #7dd3fc; margin-bottom: 16px; letter-spacing: 1px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .card {
+      background: #1e2330; border: 1px solid #2d3748;
+      border-radius: 8px; padding: 12px; height: 300px;
+      display: flex; flex-direction: column;
+    }
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px; border-bottom: 1px solid #2d3748; padding-bottom: 8px;
+    }
+    .card-title { font-size: 13px; font-weight: bold; color: #7dd3fc; }
+    .card-ip { font-size: 11px; color: #64748b; }
+    .status { width: 8px; height: 8px; border-radius: 50%; background: #64748b; }
+    .status.ok { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+    .status.fail { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+    .log { flex: 1; overflow-y: auto; font-size: 11px; line-height: 1.6; }
+    .log-line { padding: 1px 0; border-bottom: 1px solid #1a1f2e; }
+    .log-line.ok { color: #86efac; }
+    .log-line.fail { color: #fca5a5; }
+    .log-line.info { color: #94a3b8; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>🖥 Ping Monitor Dashboard</h1>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const TARGETS = [
+      { label: 'pfsense Gateway',    ip: '192.168.1.1' },
+      { label: 'Google DNS',       ip: '8.8.8.8'     },
+      { label: 'Cloudflare DNS',ip: '1.1.1.1'     },
+      { label: 'p1 proxy',  ip: '54.144.16.194' },
+      { label: 'p2 proxy',  ip: '54.198.49.157' },
+      { label: 'p3 proxy',  ip: '18.209.166.130' },
+      { label: 'p4 proxy',  ip: '52.91.215.81' },
+    ];
+
+    const grid = document.getElementById('grid');
+    const cards = TARGETS.map((t, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-header">
+          <div>
+            <div class="card-title">${t.label}</div>
+            <div class="card-ip">${t.ip}</div>
+          </div>
+          <div class="status" id="status-${i}"></div>
+        </div>
+        <div class="log" id="log-${i}"></div>`;
+      grid.appendChild(card);
+      return card;
+    });
+
+    const ws = new WebSocket(`ws://${location.host}`);
+    ws.onmessage = ({ data }) => {
+      const { index, line } = JSON.parse(data);
+      const log = document.getElementById(`log-${index}`);
+      const status = document.getElementById(`status-${index}`);
+      const isOk = /time=/i.test(line);
+      const isFail = /unreachable|timeout|error/i.test(line.toLowerCase());
+
+      const div = document.createElement('div');
+      div.className = 'log-line ' + (isOk ? 'ok' : isFail ? 'fail' : 'info');
+      div.textContent = line;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+      if (log.children.length > 100) log.removeChild(log.firstChild);
+
+      if (isOk) { status.className = 'status ok'; }
+      else if (isFail) { status.className = 'status fail'; }
+    };
+  </script>
+</body>
+</html>
